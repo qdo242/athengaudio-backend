@@ -1,6 +1,5 @@
 package com.athengaudio.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class Cart {
     private String userId; // Hoặc @DBRef nếu muốn reference
     
     private List<CartItem> items = new ArrayList<>();
-    private BigDecimal totalAmount = BigDecimal.ZERO;
+    private Double totalAmount = 0.0;
     
     // Constructors
     public Cart() {}
@@ -28,19 +27,19 @@ public class Cart {
     public static class CartItem {
         private String productId;
         private String productName;
-        private BigDecimal price;
+        private Double price;
         private Integer quantity;
-        private BigDecimal subTotal;
+        private Double subTotal;
         
         // Constructors, Getters, Setters
         public CartItem() {}
         
-        public CartItem(String productId, String productName, BigDecimal price, Integer quantity) {
+        public CartItem(String productId, String productName, Double price, Integer quantity) {
             this.productId = productId;
             this.productName = productName;
             this.price = price;
             this.quantity = quantity;
-            this.subTotal = price.multiply(BigDecimal.valueOf(quantity));
+            this.subTotal = price * quantity;
         }
         
         // Getters and Setters
@@ -50,24 +49,26 @@ public class Cart {
         public String getProductName() { return productName; }
         public void setProductName(String productName) { this.productName = productName; }
         
-        public BigDecimal getPrice() { return price; }
-        public void setPrice(BigDecimal price) { this.price = price; }
+        public Double getPrice() { return price; }
+        public void setPrice(Double price) { this.price = price; }
         
         public Integer getQuantity() { return quantity; }
         public void setQuantity(Integer quantity) { 
             this.quantity = quantity;
-            this.subTotal = this.price.multiply(BigDecimal.valueOf(quantity));
+            if (this.price != null) {
+                this.subTotal = this.price * quantity;
+            }
         }
         
-        public BigDecimal getSubTotal() { return subTotal; }
-        public void setSubTotal(BigDecimal subTotal) { this.subTotal = subTotal; }
+        public Double getSubTotal() { return subTotal; }
+        public void setSubTotal(Double subTotal) { this.subTotal = subTotal; }
     }
     
     // Methods to calculate total
     public void calculateTotal() {
         this.totalAmount = items.stream()
-            .map(CartItem::getSubTotal)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .mapToDouble(CartItem::getSubTotal)
+            .sum();
     }
     
     public void addItem(CartItem item) {
@@ -100,7 +101,7 @@ public class Cart {
     
     public void clearCart() {
         items.clear();
-        totalAmount = BigDecimal.ZERO;
+        totalAmount = 0.0;
     }
     
     // Getters and Setters
@@ -116,6 +117,6 @@ public class Cart {
         calculateTotal();
     }
     
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
+    public Double getTotalAmount() { return totalAmount; }
+    public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
 }

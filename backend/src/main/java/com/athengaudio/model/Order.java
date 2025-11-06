@@ -27,7 +27,7 @@ public class Order {
     }
     
     public enum PaymentMethod {
-        CREDIT_CARD, PAYPAL, COD
+        CREDIT_CARD, PAYPAL, COD, BANK_TRANSFER
     }
     
     // OrderItem inner class
@@ -62,7 +62,9 @@ public class Order {
         public Integer getQuantity() { return quantity; }
         public void setQuantity(Integer quantity) { 
             this.quantity = quantity;
-            this.subTotal = this.price.multiply(BigDecimal.valueOf(quantity));
+            if (this.price != null) {
+                this.subTotal = this.price.multiply(BigDecimal.valueOf(quantity));
+            }
         }
         
         public BigDecimal getSubTotal() { return subTotal; }

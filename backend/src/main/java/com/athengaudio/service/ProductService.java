@@ -16,6 +16,8 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    
+
     public List<Product> getAllProducts() {
         return productRepository.findByIsActiveTrue();
     }
@@ -152,4 +154,7 @@ public class ProductService {
                 })
                 .orElse(null);
     }
+    
+
+
 }

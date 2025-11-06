@@ -2,6 +2,7 @@ package com.athengaudio.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -38,4 +39,5 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByNameContainingIgnoreCaseAndIsActiveTrue(String name);
     List<Product> findByIsFeaturedTrueAndIsActiveTrue();
     List<Product> findByIsActiveTrueOrderByCreatedAtDesc();
+    List<Product> findByCategoryIdAndIdNot(String categoryId, String productId, Pageable pageable);
 }
